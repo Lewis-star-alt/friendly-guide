@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расширенный генератор пользователей</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-section {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex: 1 1 40%;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+        }
+
+        .checkbox-item.checked {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-color: var(--primary);
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin: 0;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--success));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .user-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: var(--gray);
+        }
+
+        .category {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f4f8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title::before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 30px;
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .data-item {
+            margin-bottom: 12px;
+        }
+
+        .data-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            font-size: 1.05rem;
+            word-break: break-word;
+        }
+
+        .notification {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Генератор тестовых пользователей</h1>
+            <p class="subtitle">Создавайте реалистичные профили для тестирования приложений, заполнения баз данных и демонстраций</p>
+        </header>
+
+        <div class="main-content">
+            <div class="form-section">
+                <form method="post" action="/generate">
+                    <div class="form-group">
+                        <label for="count">Количество пользователей</label>
+                        <input type="range" id="count" name="count" min="1" max="20" value="5">
+                        <div class="hint">Выбрано: <span id="count-value">5</span> пользователей</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Пол</label>
+                        <select id="gender" name="gender">
+                            <option value="any">Любой</option>
+                            <option value="male">Мужской</option>
+                            <option value="female">Женский</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locale">Локализация</label>
+                        <select id="locale" name="locale">
+                            <option value="en_US">Английский (США)</option>
+                            <option value="ru_RU">Русский</option>
+                            <option value="de_DE">Немецкий</option>
+                            <option value="fr_FR">Французский</option>
+                            <option value="ja_JP">Японский</option>
+                            <option value="es_ES">Испанский</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Основные данные</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_avatar" value="true" checked>
+                                Аватар
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_age" value="true" checked>
+                                Возраст
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_id" value="true">
+                                ID документы
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Контактная информация</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_contacts" value="true" checked>
+                                Контакты
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_address" value="true" checked>
+                                Адрес
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_social" value="true">
+                                Соцсети
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Профессиональные данные</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_job" value="true" checked>
+                                Работа
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_education" value="true">
+                                Образование
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Финансовая информация</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_bank" value="true">
+                                Банковские реквизиты
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_credit" value="true">
+                                Кредитные карты
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Дополнительные данные</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_interests" value="true">
+                                Интересы
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="include_medical" value="true">
+                                Медицинские данные
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit">Сгенерировать пользователей</button>
+                </form>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <div class="avatar">JD</div>
+                        <div class="user-info">
+                            <h2>Джон Доев</h2>
+                            <p>Тестовый пользователь #1</p>
+                        </div>
+                    </div>
+
+                    <div class="category">
+                        <h3 class="category-title">Личная информация</h3>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Дата рождения</div>
+                                <div class="data-value">15 марта 1985</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Возраст</div>
+                                <div class="data-value">38 лет</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Пол</div>
+                                <div class="data-value">Мужской</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">ID документ</div>
+                                <div class="data-value">PAS-12345678</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category">
+                        <h3 class="category-title">Контактная информация</h3>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Email</div>
+                                <div class="data-value">john.doe@example.com</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Телефон</div>
+                                <div class="data-value">+1 (555) 123-4567</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Адрес</div>
+                                <div class="data-value">ул. Примерная, 123, Москва</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Соцсети</div>
+                                <div class="data-value">
+                                    <div>FB: john.doe</div>
+                                    <div>TW: @johndoe</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="category">
+                        <h3 class="category-title">Профессиональная информация</h3>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Компания</div>
+                                <div class="data-value">Tech Innovations Inc.</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Должность</div>
+                                <div class="data-value">Старший разработчик</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Образование</div>
+                                <div class="data-value">МГУ, Информатика</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Зарплата</div>
+                                <div class="data-value">$120,000/год</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notification">
+                        Выберите нужные параметры и нажмите "Сгенерировать пользователей", чтобы создать реалистичные тестовые данные.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 Генератор тестовых данных | Использует библиотеку Faker | Создано с FastAPI</p>
+        </footer>
+    </div>
+
+    <script>
+        // Обновление значения при изменении ползунка
+        const countSlider = document.getElementById('count');
+        const countValue = document.getElementById('count-value');
+
+        countSlider.addEventListener('input', function() {
+            countValue.textContent = this.value;
+        });
+
+        // Обработка чекбоксов
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+
+            // Установка начального состояния
+            if(checkbox.checked) {
+                item.classList.add('checked');
+            }
+
+            // Обработка клика
+            item.addEventListener('click', function(e) {
+                if(e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+
+                if(checkbox.checked) {
+                    item.classList.add('checked');
+                } else {
+                    item.classList.remove('checked');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

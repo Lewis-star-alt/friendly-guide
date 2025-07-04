@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сгенерированные пользователи</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 15px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            flex-wrap: wrap;
+        }
+
+        .header-info span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn i {
+            font-size: 1.2rem;
+        }
+
+        .btn.export {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn.export:hover {
+            background: #3bb5d8;
+        }
+
+        .users-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 30px;
+            padding: 30px;
+        }
+
+        @media (max-width: 1000px) {
+            .users-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .user-body {
+            padding: 25px;
+        }
+
+        .category {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f4f8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-title::before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 30px;
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .data-item {
+            margin-bottom: 12px;
+        }
+
+        .data-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            font-size: 1.05rem;
+            word-break: break-word;
+        }
+
+        .financial-data {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--success);
+            margin-top: 10px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #e6f7ff;
+            color: #1890ff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .map-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .map-link:hover {
+            text-decoration: underline;
+        }
+
+        .history-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Сгенерированные пользователи</h1>
+                <div class="header-info">
+                    <span>Количество: {{ count }}</span>
+                    <span>Локализация: {{ locale_name }}</span>
+                    <span>Пол: {{ gender_name }}</span>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='/'">
+                    <i>←</i> Назад
+                </button>
+                <button class="btn export" onclick="exportData('json')">
+                    <i>↓</i> Экспорт JSON
+                </button>
+            </div>
+        </header>
+
+        <div class="users-container">
+            {% if users %}
+                {% for user in users %}
+                <div class="user-card">
+                    <div class="user-header">
+                        {% if user.avatar %}
+                        <div class="avatar">
+                            <img src="{{ user.avatar }}" alt="Avatar" class="avatar-img">
+                        </div>
+                        {% else %}
+                        <div class="avatar">{{ user.initials }}</div>
+                        {% endif %}
+                        <div class="user-info">
+                            <h2>{{ user.name }}</h2>
+                            <p>{{ user.job }}, {{ user.company }}</p>
+                        </div>
+                    </div>
+
+                    <div class="user-body">
+                        <!-- Основная информация -->
+                        <div class="category">
+                            <h3 class="category-title">Основная информация</h3>
+                            <div class="data-grid">
+                                <div class="data-item">
+                                    <div class="data-label">Имя</div>
+                                    <div class="data-value">{{ user.first_name }} {{ user.last_name }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Дата рождения</div>
+                                    <div class="data-value">{{ user.birthdate }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Возраст</div>
+                                    <div class="data-value">{{ user.age }} лет</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Пол</div>
+                                    <div class="data-value">{{ user.gender }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">ID документ</div>
+                                    <div class="data-value">{{ user.id_number }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Семейное положение</div>
+                                    <div class="data-value">
+                                        {{ user.family.status }}
+                                        {% if user.family.children %}
+                                        <br><small>{{ user.family.children }} детей</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Контактная информация -->
+                        <div class="category">
+                            <h3 class="category-title">Контактная информация</h3>
+                            <div class="data-grid">
+                                <div class="data-item">
+                                    <div class="data-label">Email</div>
+                                    <div class="data-value">{{ user.email }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Телефон</div>
+                                    <div class="data-value">{{ user.phone }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Адрес</div>
+                                    <div class="data-value">
+                                        {{ user.address }}
+                                        {% if user.address_data.coordinates %}
+                                        <a href="https://maps.google.com/?q={{ user.address_data.coordinates[0] }},{{ user.address_data.coordinates[1] }}"
+                                           class="map-link" target="_blank">
+                                            Посмотреть на карте
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Соцсети</div>
+                                    <div class="data-value">
+                                        {% for platform, url in user.social.items() %}
+                                        <div>{{ platform|capitalize }}: {{ url }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Вебсайт</div>
+                                    <div class="data-value">{{ user.website }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Профессиональная информация -->
+                        <div class="category">
+                            <h3 class="category-title">Профессиональная информация</h3>
+                            <div class="data-grid">
+                                <div class="data-item">
+                                    <div class="data-label">Компания</div>
+                                    <div class="data-value">{{ user.company }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Должность</div>
+                                    <div class="data-value">{{ user.job }}</div>
+                                </div>
+
+                                    <div class="data-item">
+                                        <div class="data-label">Образование</div>
+                                        <div class="data-value">
+                                            {{ user.education.major }} ({{ user.education.year }})
+                                        </div>
+                                    </div>
+
+                                <div class="data-item">
+                                    <div class="data-label">История работы</div>
+                                    <div class="data-value">
+                                        {% for job in user.employment_history %}
+                                        <div class="history-item">
+                                            <strong>{{ job.company }}</strong><br>
+                                            {{ job.position }}<br>
+                                            <small>{{ job.period }} ({{ job.duration }})</small>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Финансовая информация -->
+                        {% if user.financial %}
+                        <div class="category">
+                            <h3 class="category-title">Финансовая информация</h3>
+                            <div class="financial-data">
+                                <div class="data-grid">
+                                    <div class="data-item">
+                                        <div class="data-label">Банковский счет</div>
+                                        <div class="data-value">{{ user.financial.bank }}</div>
+                                    </div>
+                                    <div class="data-item">
+                                        <div class="data-label">Кредитная карта</div>
+                                        <div class="data-value">{{ user.financial.credit_card }}</div>
+                                    </div>
+                                    <div class="data-item">
+                                        <div class="data-label">Зарплата</div>
+                                        <div class="data-value">{{ user.financial.salary }}</div>
+                                    </div>
+                                    <div class="data-item">
+                                        <div class="data-label">Валюта</div>
+                                        <div class="data-value">{{ user.financial.currency }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+                        <!-- Медицинские данные -->
+                        {% if user.medical %}
+                        <div class="category">
+                            <h3 class="category-title">Медицинские данные</h3>
+                            <div class="data-grid">
+                                <div class="data-item">
+                                    <div class="data-label">Группа крови</div>
+                                    <div class="data-value">{{ user.medical.blood_type }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Рост/Вес</div>
+                                    <div class="data-value">{{ user.medical.height }} / {{ user.medical.weight }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Аллергии</div>
+                                    <div class="data-value">
+                                        {% for allergy in user.medical.allergies %}
+                                        <span class="tag">{{ allergy }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Дополнительная информация -->
+                        <div class="category">
+                            <h3 class="category-title">Дополнительная информация</h3>
+                            <div class="data-grid">
+                                <div class="data-item">
+                                    <div class="data-label">Логин</div>
+                                    <div class="data-value">{{ user.username }}</div>
+                                </div>
+                                <div class="data-item">
+                                    <div class="data-label">Пароль</div>
+                                    <div class="data-value">{{ user.password }}</div>
+                                </div>
+                                {% if user.interests %}
+                                <div class="data-item">
+                                    <div class="data-label">Интересы</div>
+                                    <div class="data-value">
+                                        <div class="tags">
+                                            {% for interest in user.interests %}
+                                            <span class="tag">{{ interest }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <h2>Нет данных для отображения</h2>
+                    <p>Попробуйте изменить параметры генерации</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <footer>
+            <p>Сгенерировано в {{ timestamp }} | Использует библиотеку Faker | Создано с FastAPI</p>
+        </footer>
+    </div>
+
+    <script>
+        function exportData(format) {
+            // Здесь будет логика экспорта данных
+            alert(`Экспорт данных в формате ${format.toUpperCase()} будет реализован в следующих версиях`);
+        }
+
+        // Добавляем инициалы пользователям
+        document.querySelectorAll('.user-info h2').forEach(nameEl => {
+            const name = nameEl.textContent;
+            const names = name.split(' ');
+            if (names.length >= 2) {
+                const initials = names[0][0] + names[1][0];
+                const avatar = nameEl.closest('.user-card').querySelector('.avatar');
+                if(avatar && !avatar.querySelector('img')) {
+                    avatar.textContent = initials;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
