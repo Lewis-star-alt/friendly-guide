@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/neyro.iml" filepath="$PROJECT_DIR$/.idea/neyro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/generate_people.iml" filepath="$PROJECT_DIR$/.idea/generate_people.iml" />
     </modules>
   </component>
 </project>
