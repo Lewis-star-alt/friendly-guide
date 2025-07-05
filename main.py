@@ -164,7 +164,7 @@ async def generate_users(
         )
         users.append(user)
 
-    # Для отображения в шаблоне названий параметров
+
     locale_names = {
         "en_US": "Английский (США)",
         "ru_RU": "Русский",
